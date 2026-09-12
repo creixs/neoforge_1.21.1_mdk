@@ -1,30 +1,15 @@
-# The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
 modLoader="javafml"
-
-# A version range to match for said mod loader
 loaderVersion="${loader_version_range}"
-
-# The license for your mod
 license="${mod_license}"
 
-# A list of mods
 [[mods]]
-
-# The modid of the mod
 modId="mygenerator"
-
-# The version number of the mod
-version="${mod_version}"
-
-# A display name for the mod
-displayName="${mod_name}"
-
-# The description text for the mod
+version="1.0.0"
+displayName="Empty Generator Mod"
 description='''
 Empty Generator Mod.
 '''
 
-# Dependencies for mygenerator
 [[dependencies.mygenerator]]
 modId="neoforge"
 type="required"
