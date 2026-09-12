@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "mygenerator:block/empty_generator"
+    }
+  }
+}
