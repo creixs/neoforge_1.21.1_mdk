@@ -1,4 +1,4 @@
-package com.example.mygenerator;
+package com.creixs_generators;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -10,7 +10,7 @@ public class EmptyGeneratorScreen extends AbstractContainerScreen<EmptyGenerator
 
     // Pfad zu deiner Custom-Textur (z.B. aus MCreator exportiert)
     private static final ResourceLocation TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(MyGeneratorMod.MODID, "textures/gui/container/generator_gui.png");
+            ResourceLocation.fromNamespaceAndPath(CreixsGeneratorsMod.MODID, "textures/gui/container/generator_gui.png");
 
     public EmptyGeneratorScreen(EmptyGeneratorMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);

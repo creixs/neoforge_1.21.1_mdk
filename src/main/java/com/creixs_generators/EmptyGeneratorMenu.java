@@ -1,4 +1,4 @@
-package com.example.mygenerator;
+package com.creixs_generators;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -9,9 +9,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import net.minecraft.world.inventory.ClickType;
-import net.minecraft.world.inventory.Slot;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
 
 public class EmptyGeneratorMenu extends AbstractContainerMenu {
 
@@ -24,12 +21,20 @@ public class EmptyGeneratorMenu extends AbstractContainerMenu {
 
     // Server-Konstruktor
     public EmptyGeneratorMenu(int containerId, Inventory playerInventory, BlockEntity entity) {
-        super(MyGeneratorMod.EMPTY_GENERATOR_MENU.get(), containerId);
+        super(CreixsGeneratorsMod.EMPTY_GENERATOR_MENU.get(), containerId);
         this.blockEntity = (EmptyGeneratorBlockEntity) entity;
 
         // Slot 0: Input (links)
         // Slot 0 ist jetzt unser GhostSlot!
-        this.addSlot(new GhostSlot(blockEntity.itemHandler, 0, 34, 35));
+        this.addSlot(new GhostSlot(blockEntity.itemHandler, 0, 34, 35) {
+                         @Override
+                         public boolean mayPlace(ItemStack stack) {
+                             // Nur erlauben, wenn das Item in der Config gewhitelistet ist
+                             return GeneratorConfig.isItemAllowed(stack);
+                         }
+                     }
+
+        );
         // Slot 1: Output (rechts)
         this.addSlot(new SlotItemHandler(blockEntity.itemHandler, 1, 124, 35));
 
@@ -46,7 +51,7 @@ public class EmptyGeneratorMenu extends AbstractContainerMenu {
                         this.blockEntity.getBlockPos()
                 ),
                 player,
-                MyGeneratorMod.EMPTY_GENERATOR_BLOCK.get()
+                CreixsGeneratorsMod.EMPTY_GENERATOR_BLOCK.get()
         );
     }
 
@@ -94,6 +99,7 @@ public class EmptyGeneratorMenu extends AbstractContainerMenu {
             this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
         }
     }
+
     @Override
     public void clicked(int slotId, int button, ClickType clickType, Player player) {
         // Prüfen, ob der geklickte Slot der Ghost-Slot (Slot 0) ist

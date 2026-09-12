@@ -1,4 +1,4 @@
-package com.example.mygenerator;
+package com.creixs_generators;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -33,27 +33,69 @@ public class EmptyGeneratorBlockEntity extends BlockEntity implements MenuProvid
     };
 
     public EmptyGeneratorBlockEntity(BlockPos pos, BlockState state) {
-        super(MyGeneratorMod.EMPTY_GENERATOR_BE.get(), pos, state);
+        super(CreixsGeneratorsMod.EMPTY_GENERATOR_BE.get(), pos, state);
     }
 
-    public static void tick(Level level, BlockPos pos, BlockState state, EmptyGeneratorBlockEntity blockEntity) {
+    public static void tick(Level level, BlockPos pos, BlockState state, EmptyGeneratorBlockEntity entity) {
         if (level.isClientSide()) return;
 
-        ItemStack inputStack = blockEntity.itemHandler.getStackInSlot(0);
+        ItemStack template = entity.itemHandler.getStackInSlot(0);
 
-        // 1. Item-Generierung
-        if (!inputStack.isEmpty()) {
-            blockEntity.progress++;
-            if (blockEntity.progress >= MAX_PROGRESS) {
-                blockEntity.progress = 0;
-                blockEntity.generateItem(inputStack);
-            }
-        } else {
-            blockEntity.progress = 0;
+        // Prüfe, ob ein Item drin liegt UND ob es gewhitelistet ist
+        if (template.isEmpty() || !GeneratorConfig.isItemAllowed(template)) {
+            return;
         }
 
-        // 2. Automatischer Export nach unten (Kisten, Drawer, Hopper, Pipes etc.)
-        blockEntity.exportToBottomInventory();
+        entity.progress++;
+
+        // Generierungs-Logik
+        if (entity.progress >= GeneratorConfig.GENERATION_TICKS.get()) {
+            entity.progress = 0;
+
+            ItemStack result = template.copy();
+            result.setCount(GeneratorConfig.OUTPUT_AMOUNT.get());
+
+            ItemStack currentOutput = entity.itemHandler.getStackInSlot(1);
+            if (currentOutput.isEmpty()) {
+                entity.itemHandler.setStackInSlot(1, result);
+                entity.setChanged();
+            } else if (ItemStack.isSameItemSameComponents(currentOutput, result) &&
+                    currentOutput.getCount() + result.getCount() <= currentOutput.getMaxStackSize()) {
+                currentOutput.grow(result.getCount());
+                entity.setChanged();
+            }
+        }
+
+        if (GeneratorConfig.ENABLE_AUTO_EXPORT.get()) {
+            entity.exportToBottomTile();
+        }
+    }
+
+    private void exportToBottomTile() {
+        if (level == null || level.isClientSide()) return;
+
+        ItemStack outputStack = this.itemHandler.getStackInSlot(1);
+        if (outputStack.isEmpty()) return;
+
+        // Das BlockEntity direkt unter dem Generator holen
+        BlockPos belowPos = this.worldPosition.below();
+
+        // NeoForge ItemHandler-Capability unterhalb abfragen
+        var cap = level.getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, belowPos, net.minecraft.core.Direction.UP);
+        if (cap != null) {
+            for (int slot = 0; slot < cap.getSlots(); slot++) {
+                // Versuche 1 Item einzufügen
+                ItemStack singleItem = outputStack.copyWithCount(1);
+                ItemStack remainder = cap.insertItem(slot, singleItem, false);
+
+                if (remainder.isEmpty()) {
+                    // Bei Erfolg: 1 Item aus dem Generator-Output entfernen
+                    outputStack.shrink(1);
+                    this.setChanged();
+                    break;
+                }
+            }
+        }
     }
 
     private void generateItem(ItemStack inputStack) {
@@ -127,7 +169,16 @@ public class EmptyGeneratorBlockEntity extends BlockEntity implements MenuProvid
 
     @Override
     public Component getDisplayName() {
-        return Component.literal("Empty Generator");
+        // 1. Ghost-Item aus Slot 0 abfragen
+        ItemStack template = this.itemHandler.getStackInSlot(0);
+
+        // 2. Wenn ein Template gesetzt ist, dynamischen Namen erzeugen
+        if (!template.isEmpty()) {
+            return Component.literal(template.getHoverName().getString() + " Generator");
+        }
+
+        // 3. Wenn leer, Standard-Titel nutzen
+        return Component.translatable(getBlockState().getBlock().getDescriptionId());
     }
 
     @Nullable
@@ -150,5 +201,27 @@ public class EmptyGeneratorBlockEntity extends BlockEntity implements MenuProvid
             itemHandler.deserializeNBT(registries, tag.getCompound("inventory"));
         }
         this.progress = tag.getInt("progress");
+    }
+
+    // 1. Diese NBT-Übertragungsmethoden für Client-Sync ergänzen/anpassen:
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        CompoundTag tag = super.getUpdateTag(registries);
+        saveAdditional(tag, registries);
+        return tag;
+    }
+
+    @Override
+    public net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    // 2. In onItemHandlerContentsChanged (bzw. setChanged) ein Block-Update anfordern:
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        if (level != null && !level.isClientSide()) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        }
     }
 }

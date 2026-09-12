@@ -1,4 +1,4 @@
-package com.example.mygenerator;
+package com.creixs_generators;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

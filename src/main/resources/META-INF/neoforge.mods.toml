@@ -3,11 +3,12 @@ loaderVersion="${loader_version_range}"
 license="${mod_license}"
 
 [[mods]]
-modId="mygenerator"
+modId="creixs_generators"
 version="1.0.0"
-displayName="Empty Generator Mod"
+displayName="Creixs Generators"
+authors = "Creixs"
 description='''
-Empty Generator Mod.
+Adds simple and customizable generators for items, ores etc.
 '''
 
 [[dependencies.mygenerator]]

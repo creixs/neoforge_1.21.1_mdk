@@ -1,0 +1,47 @@
+{
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "stone": "minecraft:block/smooth_stone",
+    "glass": "minecraft:block/glass",
+    "particle": "minecraft:block/smooth_stone"
+  },
+  "elements": [
+    {
+      "comment": "Bodenplatte (Smooth Stone)",
+      "from": [0, 0, 0],
+      "to": [16, 2, 16],
+      "faces": {
+        "down":  { "uv": [0, 0, 16, 16], "texture": "#stone", "cullface": "down" },
+        "up":    { "uv": [0, 0, 16, 16], "texture": "#stone" },
+        "north": { "uv": [0, 14, 16, 16], "texture": "#stone" },
+        "south": { "uv": [0, 14, 16, 16], "texture": "#stone" },
+        "west":  { "uv": [0, 14, 16, 16], "texture": "#stone" },
+        "east":  { "uv": [0, 14, 16, 16], "texture": "#stone" }
+      }
+    },
+    {
+      "comment": "Deckelplatte oben (Smooth Stone)",
+      "from": [0, 14, 0],
+      "to": [16, 16, 16],
+      "faces": {
+        "up":    { "uv": [0, 0, 16, 16], "texture": "#stone", "cullface": "up" },
+        "down":  { "uv": [0, 0, 16, 16], "texture": "#stone" },
+        "north": { "uv": [0, 0, 16, 2], "texture": "#stone" },
+        "south": { "uv": [0, 0, 16, 2], "texture": "#stone" },
+        "west":  { "uv": [0, 0, 16, 2], "texture": "#stone" },
+        "east":  { "uv": [0, 0, 16, 2], "texture": "#stone" }
+      }
+    },
+    {
+      "comment": "Glas-Seitenwände (Mitte)",
+      "from": [0, 2, 0],
+      "to": [16, 14, 16],
+      "faces": {
+        "north": { "uv": [0, 2, 16, 14], "texture": "#glass", "cullface": "north" },
+        "south": { "uv": [0, 2, 16, 14], "texture": "#glass", "cullface": "south" },
+        "west":  { "uv": [0, 2, 16, 14], "texture": "#glass", "cullface": "west" },
+        "east":  { "uv": [0, 2, 16, 14], "texture": "#glass", "cullface": "east" }
+      }
+    }
+  ]
+}

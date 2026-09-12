@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "creixs_generators:block/empty_generator"
+    }
+  }
+}
