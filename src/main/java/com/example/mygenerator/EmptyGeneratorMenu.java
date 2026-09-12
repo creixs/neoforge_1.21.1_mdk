@@ -35,7 +35,11 @@ public class EmptyGeneratorMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(this.blockEntity.getBlockPos(), player, MyGeneratorMod.EMPTY_GENERATOR_BLOCK.get());
+        return AbstractContainerMenu.stillValid(
+                ContainerLevelAccess.create(this.blockEntity.getLevel(), this.blockEntity.getBlockPos()),
+                player,
+                MyGeneratorMod.EMPTY_GENERATOR_BLOCK.get()
+        );
     }
 
     @Override
