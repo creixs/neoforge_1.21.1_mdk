@@ -29,9 +29,9 @@ public class EmptyGeneratorMenu extends AbstractContainerMenu {
 
         // Slot 0: Input (links)
         // Slot 0 ist jetzt unser GhostSlot!
-        this.addSlot(new GhostSlot(blockEntity.itemHandler, 0, 56, 35));
+        this.addSlot(new GhostSlot(blockEntity.itemHandler, 0, 34, 35));
         // Slot 1: Output (rechts)
-        this.addSlot(new SlotItemHandler(blockEntity.itemHandler, 1, 116, 35));
+        this.addSlot(new SlotItemHandler(blockEntity.itemHandler, 1, 124, 35));
 
         // Spieler-Inventar hinzufügen (3x9 Hauptinventar + 9 Hotbar)
         addPlayerInventory(playerInventory);
