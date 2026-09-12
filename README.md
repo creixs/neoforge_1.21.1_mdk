@@ -46,3 +46,17 @@ Server administrators can fine-tune every aspect of the mod. Settings are manage
         "minecraft:cobblestone",
         "minecraft:coal"
     ]
+
+```
+## Installation
+### Client & Server
+1. Download and install NeoForge for Minecraft 1.21.1.
+
+2. Place the creixs_generators-1.21.1-x.x.x.jar file into your .minecraft/mods (or server mods) folder.
+
+3. Launch the game or start the server.
+
+## License & Credits
+Created by Creixs
+
+Developed with NeoForge for Minecraft 1.21.1.
