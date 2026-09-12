@@ -6,24 +6,22 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class MyGeneratorScreen extends AbstractContainerScreen<MyGeneratorMenu> {
+public class EmptyGeneratorScreen extends AbstractContainerScreen<EmptyGeneratorMenu> {
 
-    // Pfad zu deinem erstellten PNG
+    // Pfad zu deiner Custom-Textur (z.B. aus MCreator exportiert)
     private static final ResourceLocation TEXTURE =
             ResourceLocation.fromNamespaceAndPath(MyGeneratorMod.MODID, "textures/gui/container/generator_gui.png");
 
-    public MyGeneratorScreen(MyGeneratorMenu menu, Inventory inventory, Component title) {
+    public EmptyGeneratorScreen(EmptyGeneratorMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
-        this.imageWidth = 176;  // Breite deines Fensters
-        this.imageHeight = 166; // Höhe deines Fensters
+        this.imageWidth = 176;
+        this.imageHeight = 166;
     }
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
-
-        // Zeichnet deine 256x256 Textur ab Position (0,0) des Fensters
         guiGraphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
     }
 
