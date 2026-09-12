@@ -19,6 +19,8 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
 @Mod(MyGeneratorMod.MODID)
 public class MyGeneratorMod {
@@ -63,9 +65,20 @@ public class MyGeneratorMod {
         MENUS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
 
+        // Capability Event registrieren
+        modEventBus.addListener(this::registerCapabilities);
+
         if (FMLEnvironment.dist == Dist.CLIENT) {
             modEventBus.addListener(this::onRegisterScreens);
         }
+    }
+
+    private void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                EMPTY_GENERATOR_BE.get(),
+                (blockEntity, side) -> blockEntity.getItemHandlerCapability(side)
+        );
     }
 
     private void onRegisterScreens(RegisterMenuScreensEvent event) {
