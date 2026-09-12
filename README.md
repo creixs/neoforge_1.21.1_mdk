@@ -1,25 +1,48 @@
+# Creixs Generators
 
-Installation information
-=======
+**Creixs Generators** is a fully functional, highly configurable, and NBT-persistent generator mod built for **Minecraft 1.21.1** using **NeoForge**.
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+Designed with Skyblock servers, technical gameplay, and server administrators in mind, it allows players to automate resources while giving admins complete control over balance and item permissions.
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+---
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+## Features
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+* **Dynamic Ghost-Slot Generator**: Place any allowed item/template into Slot 0 of the generator to start producing items into Slot 1.
+* **Smart Dynamic GUI & NBT Persistence**: The generator block dynamically renames itself in inventory and menus based on the item inside (e.g., *Redstone Dust Generator*). When broken, output items drop to the ground while the template remains saved in the item's NBT!
+* **Server-Side Configuration**: Tweak tick rates, output quantities, and auto-export behavior globally via `.minecraft/config/creixs_generators-common.toml`.
+* **Flexible Whitelist System**: Support for both **Conventional Tags** (`c:ores`, `c:gems`, `c:dusts`, etc.) and specific item IDs (e.g., `minecraft:coal`, `minecraft:cobblestone`).
+* **Automated Output**: Built-in auto-export functionality to directly push generated items into chests, hoppers, or pipes directly below the block.
+* **Custom Rendering**: Floating and rotating item preview inside the generator's glass structure.
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+---
+
+## Configuration (`creixs_generators-common.toml`)
+
+Server administrators can fine-tune every aspect of the mod. Settings are managed server-side and take effect globally.
+
+```toml
+["Creixs Generators Settings"]
+    # Duration in ticks required to produce 1 item (20 ticks = 1 second)
+    generationTicks = 100
+
+    # Amount of items produced per generation cycle
+    outputAmount = 1
+
+    # Whether the generator automatically pushes items into containers below
+    enableAutoExport = true
+
+["Whitelist Settings"]
+    # List of Item Tags (Common/Conventional Tags) allowed as templates
+    allowedTags = [
+        "c:ores",
+        "c:gems",
+        "c:dusts",
+        "c:raw_materials"
+    ]
+
+    # Specific item IDs allowed as templates
+    allowedItems = [
+        "minecraft:cobblestone",
+        "minecraft:coal"
+    ]
